@@ -40,7 +40,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $factory = new \Nm\Factory();
-        $factory->getBundles($output);
+        $configFiles = $factory->getBundlesConfig($output);
     }
 
 }

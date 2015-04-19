@@ -22,36 +22,78 @@ use Nm\Utils\JsonFile;
 class Factory
 {
 
+    private $configuratedBundels;
+
+    public function __construct()
+    {
+        $configFile = static::getConfigBundlesFile();
+
+        $this->configuratedBundels = self::parseJson($configFile);
+    }
+
     private static function getComposerFile()
     {
         return trim(getenv('PWD')) . '/composer.json';
     }
 
-    private static function parseComposerFile(OutputInterface $io)
+    private static function getConfigBundlesFile()
+    {
+        return __DIR__ . "/../../config-files/configs-repositories.json";
+    }
+
+    private static function parseComposerFile()
     {
         $composerFile = static::getComposerFile();
-        
-        $file = new JsonFile($composerFile);
-        
+
+        return self::parseJson($composerFile);
+    }
+
+    public function getBundlesConfig(OutputInterface $io)
+    {
+        $projectBundles = self::getBundlesFromComposer();
+        $configuratedBundles = $this->getBundlesCanBeConfigurated();
+
+        $bundles = array_intersect($configuratedBundles, $projectBundles);
+
+        $configFiles = [];
+
+        foreach ($bundles as $bundle) {
+            foreach ($this->configuratedBundels->{$bundle} as $file) {
+                $configFiles[] = $bundle . "/" . $file;
+            }
+        }
+
+        return $configFiles;
+    }
+
+    private static function parseJson($jsonFile)
+    {
+        $file = new JsonFile($jsonFile);
+
         return $file->read();
     }
 
-    public function getBundles(OutputInterface $io)
+    private function getBundlesCanBeConfigurated()
     {
-        $config = self::parseComposerFile($io);
-        $bundles = [];
-        if(property_exists($config, "require")) {
-            $bundles = array_merge($bundles, $this->getBundlesFromJson($config->require));
-        }
-        if(property_exists($config, "require-dev")) {
-            $bundles = array_merge($bundles, $this->getBundlesFromJson($config->{"require-dev"}));
-        }
-        
-        var_dump($bundles);
-        die;
+        return self::getBundlesName($this->configuratedBundels);
     }
-    
-    private function getBundlesFromJson($object)
+
+    private static function getBundlesFromComposer()
+    {
+        $config = self::parseComposerFile();
+
+        $bundles = [];
+        if (property_exists($config, "require")) {
+            $bundles = array_merge($bundles, self::getBundlesName($config->require));
+        }
+        if (property_exists($config, "require-dev")) {
+            $bundles = array_merge($bundles, self::getBundlesName($config->{"require-dev"}));
+        }
+
+        return $bundles;
+    }
+
+    private static function getBundlesName($object)
     {
         return array_keys(get_object_vars($object));
     }
