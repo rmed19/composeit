@@ -1,0 +1,45 @@
+{
+    "name": "rmed19/composeme",
+    "description": "ComposeME helps you configure your bundles.",
+    "keywords": ["package", "dependency", "autoload", "configure"],
+    "homepage": "http://medrhamnia.wordpress.com/composeme",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohammed Rhamnia",
+            "email": "mohammed.rhamnia@gmail.com",
+            "homepage": "ttp://medrhamnia.wordpress.com/"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/rmed19/composeme/issues"
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "justinrainbow/json-schema": "~1.4",
+        "seld/jsonlint": "~1.0",
+        "symfony/console": "~2.5",
+        "symfony/finder": "~2.2",
+        "symfony/process": "~2.1"
+    },
+    "require-dev": {
+        "sensio/generator-bundle":           "~2.3",
+        "behat/behat":                       "~2.5",
+        "behat/symfony2-extension":          "~1.1",
+        "behat/mink-extension":              "~1.2",
+        "behat/mink-browserkit-driver":      "~1.1",
+        "behat/mink-goutte-driver":          "~1.0",
+        "behat/mink-selenium2-driver":       "~1.1",
+        "phpspec/phpspec":                   "2.0.*@dev"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "bin": ["bin/composeme"],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
