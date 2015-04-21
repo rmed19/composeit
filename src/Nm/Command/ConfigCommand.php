@@ -20,7 +20,6 @@ use Symfony\Component\Console\Command\Command as BaseCommand;
  */
 class ConfigCommand extends BaseCommand
 {
-
     protected function configure()
     {
         $this
@@ -41,6 +40,12 @@ EOT
     {
         $factory = new \Nm\Factory();
         $configFiles = $factory->getBundlesConfig($output);
+        foreach ($configFiles as $bundle => $files) {
+            $output->writeln("<info>begin config $bundle bundle</info>");
+            foreach($files as $file){
+                $output->writeln("<comment> |---- begin config $file file </comment>");
+            }
+        }
     }
 
 }

@@ -1,7 +1,7 @@
 ComposeMe - Configuration System for Symfony Bundles
 ========================================
 
-ComposeMe is a configuration systmee to easy configre Symfony Bundles.
+ComposeMe is a configuration system to easy configre Symfony Bundles.
 
 See [http://github.org/rmed19/composeme](http://github.org/rmed19/composeme) for more information and documentation.
 

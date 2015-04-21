@@ -59,7 +59,7 @@ class Factory
 
         foreach ($bundles as $bundle) {
             foreach ($this->configuratedBundels->{$bundle} as $file) {
-                $configFiles[] = $bundle . "/" . $file;
+                $configFiles[$bundle][] = $file;
             }
         }
 

@@ -59,7 +59,7 @@ class JsonFile
      */
     public function exists()
     {
-        return is_file($this->path);
+        return is_file($this->path) && is_readable($this->path);
     }
 
     /**
