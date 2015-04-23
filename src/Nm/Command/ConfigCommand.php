@@ -38,8 +38,8 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $factory = new \Nm\Factory();
-        $configFiles = $factory->getBundlesConfig($output);
+        $factory = new \Nm\ConfigFactory(new \Nm\Json\JsonFactory());
+        $configFiles = $factory->configuredRepositories();
         foreach ($configFiles as $bundle => $files) {
             $output->writeln("<info>begin config $bundle bundle</info>");
             foreach($files as $file){

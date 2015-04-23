@@ -33,21 +33,4 @@ class JsonRemoteSpec extends ObjectBehavior
         $this->beConstructedWith("http://aaaaa.cd");
         $this->shouldThrow("\GuzzleHttp\Exception\ConnectException");
     }
-
-    function it_should_return_json_file_as_array()
-    {
-        $this->getContent()->shouldHaveKey('require-dev');
-    }
-
-    public function getMatchers()
-    {
-        return [
-            'haveKey' => function ($subject, $key) {
-                return array_key_exists($key, $subject);
-            },
-            'haveValue' => function ($subject, $value) {
-                return in_array($value, $subject);
-            },
-        ];
-    }
 }

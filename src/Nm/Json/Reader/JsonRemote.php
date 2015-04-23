@@ -2,19 +2,19 @@
 
 namespace Nm\Json\Reader;
 
-use Seld\JsonLint;
 use GuzzleHttp\Client;
+use Nm\Json\Interfaces\JsonFactoryInterface;
 
-class JsonRemote
+class JsonRemote implements JsonFactoryInterface
 {
 
     private $response;
 
-    public function __construct($url)
+    public function __construct($url = null)
     {
-        $client = new Client();
-        $request = $client->createRequest('GET', $url);
-        $this->response = $client->send($request);
+        if (isset($url)) {
+            $this->initResponse($url);
+        }
     }
 
     public function exist()
@@ -31,14 +31,16 @@ class JsonRemote
         return $body;
     }
 
-    public function getContent()
+    public function setPath($url)
     {
-        $content = $this->read();
+        $this->initResponse($url);
+    }
 
-        $parser = new JsonLint\JsonParser();
-        $parser->lint($content);
-
-        return $parser->parse($content);
+    public function initResponse($url)
+    {
+        $client = new Client();
+        $request = $client->createRequest('GET', $url);
+        $this->response = $client->send($request);
     }
 
 }

@@ -37,7 +37,10 @@ class JsonFactorySpec extends ObjectBehavior
 
     function it_should_return_json_file_as_array()
     {
-        $this->getContent()->shouldHaveKey('require-dev');
+        $reader = new \Nm\Json\Reader\JsonLocal();
+        $reader->read()->willReturn("{\"key\":\"value\"}");
+        $this->setReader($reader);
+        $this->getContent()->shouldHaveKey('key')->shouldHaveValue("value");
     }
 
     public function getMatchers()

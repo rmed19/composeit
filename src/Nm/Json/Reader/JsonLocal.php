@@ -2,9 +2,9 @@
 
 namespace Nm\Json\Reader;
 
-use Seld\JsonLint;
+use Nm\Json\Interfaces\JsonFactoryInterface;
 
-class JsonLocal
+class JsonLocal implements JsonFactoryInterface
 {
 
     private $path;
@@ -24,17 +24,13 @@ class JsonLocal
         if (false === $this->exist()) {
             throw new \InvalidArgumentException("Invalide file path or file can't be read");
         }
-        
+
         return file_get_contents($this->path);
     }
-    
-    public function getContent()
-    {
-        $content = $this->read();
-        
-        $parser = new JsonLint\JsonParser();
-        $parser->lint($content);
 
-        return $parser->parse($content);
+    public function setPath($path)
+    {
+        $this->path = $path;
     }
+
 }
