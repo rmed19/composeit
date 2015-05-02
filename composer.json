@@ -1,6 +1,6 @@
 {
     "name": "rmed19/composeme",
-    "description": "ComposeME helps you configure your bundles.",
+    "description": "ComposeForME helps you configure your Symfony bundles.",
     "keywords": ["package", "dependency", "autoload", "configure"],
     "homepage": "http://medrhamnia.wordpress.com/composeme",
     "type": "library",
@@ -19,9 +19,10 @@
         "php": ">=5.3.2",
         "justinrainbow/json-schema": "~1.4",
         "seld/jsonlint": "~1.0",
-        "symfony/console": "~2.5",
+        "symfony/console": "~2.6",
         "symfony/finder": "~2.2",
-        "symfony/process": "~2.1"
+        "symfony/process": "~2.1",
+        "symfony/yaml": "~2.6"
     },
     "require-dev": {
         "sensio/generator-bundle":           "~2.3",

@@ -13,19 +13,20 @@ namespace Nm\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
  * @author Mohammed Rhamnia <mohammed.rhamnia@gmail.com>
  */
-class ConfigCommand extends BaseCommand
+class ConfigCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-                ->setName('config')
+                ->setName('run')
                 ->setDescription('Launch bundles configuration')
-                ->setHelp(<<<EOT
+                ->setHelp(
+<<<EOT
 The <info>config</info> command reads the composer.json file from
 the parent directory, processes it, and downloads and config all bundles outlined in that file.
 
@@ -38,14 +39,36 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $factory = new \Nm\ConfigFactory(new \Nm\Json\JsonFactory());
+        $factory = new \Nm\ConfigLoader();
         $configFiles = $factory->configuredRepositories();
+        if (count($configFiles) == 0) {
+            $output->writeln("<info>No Configurable bundles founds</info>");
+        } else {
+            $this->beginConfiguration($input, $output, $configFiles);
+        }
+    }
+
+    protected function beginConfiguration(InputInterface $input, OutputInterface $output, $configFiles)
+    {
         foreach ($configFiles as $bundle => $files) {
-            $output->writeln("<info>begin config $bundle bundle</info>");
-            foreach($files as $file){
-                $output->writeln("<comment> |---- begin config $file file </comment>");
+            if (! $this->askConfirmation($output, "Did you want to configure $bundle [Y/n]?", true)) {
+                continue;
+            }
+            foreach ($files as $distination => $source) {
+                $output->writeln("<comment>\tbegin config $source file </comment>");
             }
         }
     }
 
+    protected function askConfirmation($output, $question, $defaultAnswer = false)
+    {
+
+        $dialog = $this->getHelperSet()->get('dialog');
+
+        return $dialog->askConfirmation(
+            $output,
+            "<question>$question</question>",
+            $defaultAnswer
+        );
+    }
 }

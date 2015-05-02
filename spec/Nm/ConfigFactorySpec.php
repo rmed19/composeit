@@ -7,35 +7,34 @@ use Prophecy\Argument;
 
 class ConfigFactorySpec extends ObjectBehavior
 {
-
-    function let(\Nm\Json\JsonFactory $jsonFactory)
-    {
-        $json->getContent()->willReturn(
-                ["knplabs/knp-paginator-bundle" => [
-                        "config.yml" => "https://raw.githubusercontent.com/rmed19/composeme-config-files/master/knplabs/knp-paginator-bundle/config.yml"
-        ]]);
-        
-        $this->beConstructedWith($jsonFactory);
+    function let() {
+        $source = "/home/mr/composeme-config-files/knplabs/knp-paginator-bundle/config.yml";
+        $distination = "app/config/config.yml";
+        $this->beConstructedWith($source, $distination);
     }
-
+    
     function it_is_initializable()
     {
         $this->shouldHaveType('Nm\ConfigFactory');
     }
-
-    function it_find_used_repositories()
+    
+    function it_should_load_source_file()
     {
-        $this->getUsedRepositories()->shouldBeAnArray();
+        $this->loadSourceFile()->shouldBeArray();
     }
-
-    function it_should_return_configurable_repositories()
+    
+    function it_should_load_distination_file()
     {
-        $this->getConfigurableRepositories()->shouldBeArray();
+        $this->loadDistinationFile()->shouldBeArray();
     }
-
-    function it_should_configure_project_files()
+    
+    function it_should_merge_source_and_distination_files()
     {
-        $this->configureRepositories()->shouldBeArray();
+        $this->mergeConfiguration()->shouldBeArray();
     }
-
+    
+    function it_should_save_merged_file()
+    {
+        $this->exportConfiguration()->shouldBeBoolean();
+    }
 }

@@ -4,67 +4,41 @@ namespace Nm;
 
 class ConfigFactory
 {
-
-    private $jsonReader;
-
-    public function __construct(Json\JsonFactory $jsonFactory)
+    private $sourceFile;
+    private $distinationFile;
+    private $sourceData;
+    private $distinationData;
+    
+    public function __construct($source, $distination)
     {
-        $this->jsonReader = $jsonFactory;
+        $this->sourceFile = $source;
+        $this->distinationFile = $distination;
     }
 
-    public function getUsedRepositories()
+    public function loadSourceFile()
     {
-        $this->jsonReader->setPath(self::getComposerFile());
-        $composerContent = $this->jsonReader->getContent();
-
-        $bundles = [];
-
-        if (isset($composerContent["require"])) {
-            $bundles = array_merge($bundles, array_keys($composerContent["require"]));
-        }
-        if (isset($composerContent["require-dev"])) {
-            $bundles = array_merge($bundles, array_keys($composerContent["require-dev"]));
-        }
-
-        return $bundles;
+        $parser = new Nm\ParserFactory($this->sourceFile);
+        $this->sourceData = $parser->loadData();
     }
 
-    public function getConfigurableRepositories()
+    public function loadDistinationFile()
     {
-        $this->jsonReader->setPath(self::getConfigRemoteFile());
-
-        return $this->jsonReader->getContent();
+        $parser = new Nm\ParserFactory($this->distinationData);
+        $this->distinationData = $parser->loadData();
     }
 
-    public function configuredRepositories()
+    public function mergeConfiguration()
     {
-        $composerRepositories = $this->getUsedRepositories();
-        $configurableRepositories = $this->getConfigurableRepositories();
-        var_dump($configurableRepositories);
-        var_dump($composerRepositories);
-        die();
-
-        $bundles = array_intersect($composerRepositories, $configurableRepositories);
-
-        $configFiles = [];
-
-        foreach ($bundles as $bundle) {
-            foreach ($configurableRepositories[$bundle] as $file) {
-                $configFiles[$bundle][] = $file;
-            }
-        }
-
-        return $configFiles;
+        // TODO: write logic here
     }
 
-    private static function getComposerFile()
+    public function exportConfiguration()
     {
-        return trim(getenv('PWD')) . '/composer.json';
+        // TODO: write logic here
     }
 
-    private static function getConfigRemoteFile()
+    public function execute()
     {
-        return trim(getenv('PWD')) . '/../composeme-config-files/configs-repositories.json';
-    }
 
+    }
 }

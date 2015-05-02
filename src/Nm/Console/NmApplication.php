@@ -12,6 +12,7 @@
 namespace Nm\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Input\InputInterface;
 
 use Nm\Command;
 
@@ -20,7 +21,7 @@ use Nm\Command;
  *
  * @author Mohammed Rhamnia <mohammed.rhamnia@gmail.com>
  */
-class Application extends BaseApplication
+class NmApplication extends BaseApplication
 {
 
     const VERSION = '0.1-alpha';
@@ -32,9 +33,9 @@ class Application extends BaseApplication
             ini_set('xdebug.scream', false);
         }
         
-        parent::__construct('ComposeMe', self::VERSION);
+        parent::__construct('composeme', self::VERSION);
     }
-
+    
     /**
      * Initializes all the composeme commands
      */
