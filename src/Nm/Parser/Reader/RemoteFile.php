@@ -1,11 +1,11 @@
 <?php
 
-namespace Nm\Json\Reader;
+namespace Nm\Parser\Reader;
 
 use GuzzleHttp\Client;
-use Nm\Json\Interfaces\JsonFactoryInterface;
+use Nm\Parser\Interfaces\ParserFactoryInterface;
 
-class JsonRemote implements JsonFactoryInterface
+class RemoteFile implements ParserFactoryInterface
 {
 
     private $response;
@@ -27,7 +27,9 @@ class JsonRemote implements JsonFactoryInterface
         if (false === $this->exist()) {
             throw new \InvalidArgumentException("Invalide file path or file can't be read");
         }
+        
         $body = $this->response->getBody()->getContents();
+        
         return $body;
     }
 
@@ -42,5 +44,4 @@ class JsonRemote implements JsonFactoryInterface
         $request = $client->createRequest('GET', $url);
         $this->response = $client->send($request);
     }
-
 }

@@ -20,13 +20,14 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class ConfigCommand extends ContainerAwareCommand
 {
+
     protected function configure()
     {
         $this
                 ->setName('run')
                 ->setDescription('Launch bundles configuration')
                 ->setHelp(
-<<<EOT
+                        <<<EOT
 The <info>config</info> command reads the composer.json file from
 the parent directory, processes it, and downloads and config all bundles outlined in that file.
 
@@ -41,6 +42,7 @@ EOT
     {
         $factory = new \Nm\ConfigLoader();
         $configFiles = $factory->configuredRepositories();
+
         if (count($configFiles) == 0) {
             $output->writeln("<info>No Configurable bundles founds</info>");
         } else {
@@ -51,24 +53,39 @@ EOT
     protected function beginConfiguration(InputInterface $input, OutputInterface $output, $configFiles)
     {
         foreach ($configFiles as $bundle => $files) {
-            if (! $this->askConfirmation($output, "Did you want to configure $bundle [Y/n]?", true)) {
+            if (!$this->askConfirmation($output, "Did you want to configure $bundle [Y/n]?", true)) {
                 continue;
             }
-            foreach ($files as $distination => $source) {
-                $output->writeln("<comment>\tbegin config $source file </comment>");
+            foreach ($files as $source => $distination) {
+                $this->configureFile($output, $bundle, $source, $distination);
             }
         }
     }
 
     protected function askConfirmation($output, $question, $defaultAnswer = false)
     {
-
-        $dialog = $this->getHelperSet()->get('dialog');
-
-        return $dialog->askConfirmation(
-            $output,
-            "<question>$question</question>",
-            $defaultAnswer
+        
+        return $this->getDialog()->askConfirmation(
+                        $output, "<question>$question</question>", $defaultAnswer
         );
+    }
+
+    protected function configureFile(OutputInterface $output, $bundle, $source, $distination)
+    {
+        $process = new \Nm\Process($source, $distination);
+        
+        if ($process->verifIfWasConfigured()) {
+            if (!$this->askConfirmation($output, "Did you want to configure file $distination for bundle $bundle [Y/n]?", true)) {
+                return false;
+            }
+        }
+        $output->writeln("<comment>\tBegin config $distination file </comment>");
+        
+        $process->launchConfiguration($output, $this->getDialog());
+    }
+
+    protected function getDialog()
+    {
+        return $this->getHelperSet()->get('dialog');
     }
 }

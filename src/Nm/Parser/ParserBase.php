@@ -1,16 +1,24 @@
 <?php
 
-namespace Nm\Json;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-use Nm\Json\Reader\JsonLocal;
-use Nm\Json\Reader\JsonRemote;
-use Seld\JsonLint;
-use Nm\Json\Interfaces\JsonFactoryInterface;
+namespace Nm\Parser;
 
-class JsonFactory implements JsonFactoryInterface
+use Nm\Parser\Reader;
+
+/**
+ * Description of ParserBase
+ *
+ * @author mr
+ */
+class ParserBase
 {
 
-    public $reader;
+    protected $reader;
 
     public function __construct($filePath = "")
     {
@@ -25,16 +33,6 @@ class JsonFactory implements JsonFactoryInterface
     public function read()
     {
         return $this->reader->read();
-    }
-
-    public function getContent()
-    {
-        $content = $this->reader->read();
-
-        $parser = new JsonLint\JsonParser();
-        $parser->lint($content);
-
-        return json_decode($content, true);;
     }
 
     public function setReader($reader)
@@ -55,9 +53,9 @@ class JsonFactory implements JsonFactoryInterface
     public function initReader($path)
     {
         if (false === filter_var($path, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
-            $this->reader = new JsonLocal($path);
+            $this->reader = new Reader\LocalFile($path);
         } else {
-            $this->reader = new JsonRemote($path);
+            $this->reader = new Reader\RemoteFile($path);
         }
     }
 

@@ -7,9 +7,9 @@ namespace Nm;
  *
  * @author mr
  */
-
 class ConfigLoader
 {
+
     private $reader;
 
     public function __construct()
@@ -37,7 +37,7 @@ class ConfigLoader
     public function getConfigurableRepositories()
     {
         $this->reader->setPath(self::getConfigRemoteFile());
-        
+
         return $this->reader->getContent();
     }
 
@@ -50,8 +50,8 @@ class ConfigLoader
         $configFiles = [];
 
         foreach ($bundles as $bundle) {
-            foreach ($configurableRepositories[$bundle] as $file) {
-                $configFiles[$bundle][] = $file;
+            foreach ($configurableRepositories[$bundle] as $distination => $source) {
+                $configFiles[$bundle][$source] = $distination;
             }
         }
 
@@ -67,4 +67,5 @@ class ConfigLoader
     {
         return trim(getenv('PWD')) . '/../composeme-config-files/configs-repositories.json';
     }
+
 }

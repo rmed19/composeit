@@ -1,12 +1,16 @@
 <?php
 
-namespace Nm\Json\Reader;
+namespace Nm\Parser\Reader;
 
-use Nm\Json\Interfaces\JsonFactoryInterface;
+use Nm\Parser\Interfaces\ParserFactoryInterface;
 
-class JsonLocal implements JsonFactoryInterface
+/**
+ * Description of YmlLocal
+ *
+ * @author mr
+ */
+class LocalFile implements ParserFactoryInterface
 {
-
     private $path;
 
     public function __construct($filePath = "")
@@ -32,5 +36,4 @@ class JsonLocal implements JsonFactoryInterface
     {
         $this->path = $path;
     }
-
 }

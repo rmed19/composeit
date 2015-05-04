@@ -7,7 +7,7 @@ namespace Nm\Parser\Xml;
  *
  * @author mr
  */
-class XmlFactory
+class XmlReaderFactory
 {
     //put your code here
 }

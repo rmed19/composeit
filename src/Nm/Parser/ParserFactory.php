@@ -2,7 +2,7 @@
 
 namespace Nm\Parser;
 
-use Nm\Parser\Json;
+use Nm\Parser;
 
 class ParserFactory implements Interfaces\ParserFactoryInterface
 {
@@ -42,11 +42,11 @@ class ParserFactory implements Interfaces\ParserFactoryInterface
 
         switch (strtolower($ext)) {
             case 'json':
-                return new Json\JsonFactory($path);
+                return new Parser\Json\JsonFactory($path);
             case 'xml':
-                return new Xml\XmlFactory($path);
+                return new Parser\Xml\XmlFactory($path);
             case 'yml':
-                return new Yml\YmlFactory($path);
+                return new Parser\Yml\YmlFactory($path);
             default:
                 throw new \Exception("Unkown File extension : $ext");
         }
